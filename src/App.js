@@ -2,17 +2,27 @@ import React,{useState} from 'react';
 // import AppRouter from './AppRouter';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter } from 'react-router-dom';
-import AuthProvider from './Context/AuthProvider';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {AuthProvider} from './Context/AuthProvider';
 import LoginPage from './Components/LoginPage';
 import SignupPage from './Components/SignupPage';
+import AuthContext from './Context/AuthProvider';
 
 const theme = createTheme({
   palette: {
     background: {
       default: "#c8e1cc"
     }
-  }
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 1000,
+      md: 1200,
+      lg: 1300,
+      xl: 1536,
+    },
+  },
 });
 
 function App() {
@@ -25,18 +35,22 @@ function App() {
     <div>
     <ThemeProvider theme={theme}>
     <CssBaseline />
-    <BrowserRouter>  
     <AuthProvider>
-      <div className='mainClass'>
-        {/* {currForm === 'login' ? <LoginPage onFormSwitch={toggleForm('signup')} /> : <SignupPage onFormSwitch={toggleForm('login')} />} */}
+    <Router>
+    <Routes>    
+      <Route path="/SignupPage" element={<SignupPage />} />
+      <Route path='/LoginPage' element={<LoginPage />} />
+      <Route path="/" element={<LoginPage />} />
+    </Routes>
+    </Router>
+      {/* <div className='mainClass'>
         {currForm === 'login' ? (
               <LoginPage setCurrForm={() => setCurrForm('signup')} />
             ) : (
               <SignupPage setCurrForm={() => setCurrForm('login')} />
             )}
-      </div>
+      </div> */}
     </AuthProvider>
-    </BrowserRouter>
     </ThemeProvider>
     </div>
   );
