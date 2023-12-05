@@ -18,7 +18,7 @@ const initialValues = {
   password: "",
 };
 
-const LoginPage = (props) => {
+const LoginPage = () => {
 
   const navigate = useNavigate();
   const [RegisterSuccess, setRegisterSuccess] = useState(false);
@@ -30,83 +30,38 @@ const LoginPage = (props) => {
     validationSchema: loginSchema, 
     onSubmit : (values,action) => {
       console.log(values.email, values.password); 
+
       let data = JSON.stringify({
-        "email": "testuser@gmail.com",
-        "password": "asdfghjkl"
+        "email": values.email,
+        "password": values.password
       });
-      
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'http://fantasyleague-pl7o.onrender.com/user/userLogin',
+        url: 'https://fantasyleague-pl7o.onrender.com/user/userLogin',
         headers: { 
           'Content-Type': 'application/json'
         },
         data : data
-      };
-      
+      };        
       axios.request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
+        if(response.data.token){
+          setRegisterSuccess(true);
+        }
+        if(setRegisterSuccess){
+          setSuccess(true);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
-      // axios.post('/user/newLogin' , {email:values.email, password:values.password},{
-      //   headers:{
-      //   'Access-Control-Allow-Origin': '*',
-      //   'Access-Control-Allow-Methods': 'OPTIONS, POST',
-      //   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      //   'Content-Type': 'application/json'
-      //   }
-      // }) 
-      // .then((response) => {
-      //   console.log(response, values); 
-      //   if(response.data.token){
-      //     setRegisterSuccess(true);
-      //   }            
-      //   if(RegisterSuccess){
-      //     setSuccess(true);
-      //     alert("Successful registration!");
-      //   }
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      //   alert("Failed registration");
-      // });
+      
       action.resetForm();
     },
   });
-    //   try{
-    //     const response = await axios.post(
-    //       LOGIN_URL,
-    //       JSON.stringify({ user, pwd }),
-    //       {
-    //         headers: { 'Content-Type': 'application/json' },
-    //         withCredentials: true
-    //       }
-    //     );
-    //     console.log(JSON.stringify(response?.data));
-    //     console.log(JSON.stringify(response));
-    //     const accessToken = response?.data?.accessToken;
-    //     const roles = response?.data?.roles;
-    //     setAuth({user,pwd,roles,accessToken})
-    //     setUser('');
-    //     setPwd('');
-    //     setSuccess(true);
-    //   } catch(err){
-    //   if (!err?.response){
-    //     setErrMsg('No Server Response');
-    //   } else if (err.response?.status === 400){
-    //     setErrMsg('Missing Username or Password');
-    //   } else if (err.response?.status === 401){
-    //     setErrMsg('Unauthorized');
-    //   } else {
-    //     setErrMsg('Login Failed');
-    //   }
-    //   errRef.current.focus();
-    // }
-  
+      
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
@@ -132,17 +87,15 @@ const LoginPage = (props) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Welcome!
               </Typography>
-              <Button color="inherit">Login</Button>
+              <Link to="/SignupPage" style={{ textDecoration: 'none' }}>Sign Up</Link>
             </Toolbar>
           </AppBar>
       </Box>
           <Container fixed sx={{mt:10,width:'60%'}}>
-          <Box sx={{display:'flex',ml:15,border:2,boxShadow:7,backgroundColor:'white',borderRadius:2,flexDirection:'column'}}>
-          <h1> You are logged in</h1>
+          <Box sx={{display:'flex',ml:'auto',border:2,boxShadow:7,backgroundColor:'white',borderRadius:2,flexDirection:'column'}}>
+          <Typography sx={{ml:'40%', mt:2}}>You are logged in</Typography>
           <br />
-          <p>
-          <Button onClick={() => navigate("/")}>Back to Home</Button>
-          </p>
+          <Button sx={{mb:2, mr:7}} onClick={() => navigate("/")}>Back to Home</Button>
           </Box>
           </Container>
         </div>

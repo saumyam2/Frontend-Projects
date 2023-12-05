@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 import { useFormik } from 'formik';
 import { signupSchema } from '../schemas';
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
 import axios from '../api/axios';
 
 const initialValues = {
@@ -30,46 +29,41 @@ const SignupPage = (props) => {
 
     const [RegisterSuccess, setRegisterSuccess] = useState(false);
 
-    // let config = {
-    //     method: 'post',
-    //     maxBodyLength: Infinity,
-    //     url: 'http://fantasyleague-pl7o.onrender.com/user/newUser',
-    //     headers: { 
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data : data
-    //     };
-
-    const {values,errors,touched,handleBlur,handleChange,handleSubmit} = useFormik({
+    const {values,errors,touched,handleBlur,handleChange,handleSubmit} = useFormik({ 
         initialValues,
         validationSchema: signupSchema,
-        onSubmit : (values,e) => {       
-            // axios.request(config)
-            // .then((response) => { console.log(JSON.stringify(response.data)); })
-            // .catch((error) => { console.log(error); })
+        onSubmit : (values,e) => {
             console.log(values.name, values.email, values.password, values.number1);
 
-            axios.post('/user/newUser' , {
-                username:values.name, email:values.email, password:values.password, mobile:values.number1
-            },{
-                headers:{
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'OPTIONS, POST',
-                    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-                }
-            }) 
+            let data = JSON.stringify({
+                "username": values.name,
+                "email": values.email,
+                "password": values.password,
+                "mobile": values.number1  
+              });
+              
+              let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://fantasyleague-pl7o.onrender.com/user/newUser',
+                headers: { 
+                  'Content-Type': 'application/json'
+                },
+                data : data
+              };
+              
+            axios.request(config)
             .then((response) => {
-                console.log(response, values); 
-                if(response.data.token){
-                    setRegisterSuccess(true);
-                }            
-                if(RegisterSuccess){
-                    alert("Successful registration!");
-                }
+            console.log(JSON.stringify(response.data)); 
+            if(response.data.token){
+                setRegisterSuccess(true);
+            }            
+            if(RegisterSuccess){
+                alert("Successful registration!");
+            }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
-                alert("Failed registration");
             });
             e.resetForm();
         },
@@ -106,8 +100,8 @@ const SignupPage = (props) => {
                     <form onSubmit={handleSubmit} action="">
                         <Box><Typography variant="h3" gutterBottom sx={{mt:2, ml:4}}> Sign Up </Typography></Box>
 
-                        <Box><InputLabel sx={{mx:5}} htmlFor="name">Name</InputLabel>
-                        <Input sx={{mx:5}} value={values.name} id="name" name="name" onChange={handleChange} onBlur={handleBlur} />{errors.name && touched.name ? <Box sx={{mx:5, textTransform: 'capitalize',color:'red'}} className='form-error'>{errors.name}</Box>: null}</Box>
+                        <Box><InputLabel sx={{mx:5}} htmlFor="name">Name</InputLabel> 
+                        <Input sx={{mx:5}} value={values.name} id="name" name="name" onChange={handleChange} onBlur={handleBlur} />{errors.name && touched.name ? <Box sx={{mx:5, textTransform: 'capitalize',color:'red'}} className='form-error'>{errors.name}</Box> : null}</Box>
 
                         <Box><InputLabel sx={{mx:5,mt:1}} htmlFor="email">Email Address</InputLabel>
                         <Input sx={{mx:5}} value={values.email} onChange={handleChange} onBlur={handleBlur} id="email" name='email' />{errors.email && touched.email ? <Box sx={{mx:5, textTransform: 'capitalize',color:'red'}} className='form-error'>{errors.email}</Box>: null}</Box>

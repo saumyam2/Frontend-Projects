@@ -7,6 +7,7 @@ import {AuthProvider} from './Context/AuthProvider';
 import LoginPage from './Components/LoginPage';
 import SignupPage from './Components/SignupPage';
 import AuthContext from './Context/AuthProvider';
+import HomePage from './Components/HomePage';
 
 const theme = createTheme({
   palette: {
@@ -28,9 +29,6 @@ const theme = createTheme({
 function App() {
   
   const [currForm, setCurrForm] = useState('login');
-  // const toggleForm = (fname) => {
-  //   setCurrForm(fname);
-  // }
   return (
     <div>
     <ThemeProvider theme={theme}>
@@ -40,7 +38,7 @@ function App() {
     <Routes>    
       <Route path="/SignupPage" element={<SignupPage />} />
       <Route path='/LoginPage' element={<LoginPage />} />
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<HomePage />} />
     </Routes>
     </Router>
       {/* <div className='mainClass'>
